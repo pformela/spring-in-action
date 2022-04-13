@@ -1,4 +1,4 @@
-package demo.rozdzial1.data;
+package demo.rozdzial1.objects;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
