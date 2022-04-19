@@ -20,7 +20,7 @@ public class JdbcIngredientRepository implements IngredientRepository {
 
     @Override
     public Ingredient findById(String id) {
-        return jdbc.queryForObject("select id, name, type from Ingreent where id=?",
+        return jdbc.queryForObject("select id, name, type from Ingredient where id=?",
                 this::mapRowToIngredient, id);
     }
 
@@ -32,7 +32,11 @@ public class JdbcIngredientRepository implements IngredientRepository {
 
     @Override
     public Ingredient save(Ingredient ingredient) {
-        return null;
+        jdbc.update("insert into Ingredient (id, name, type) values (?, ?, ?)",
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getType().toString());
+        return ingredient;
     }
 
     private Ingredient mapRowToIngredient(ResultSet rs, int rowNum) throws SQLException {

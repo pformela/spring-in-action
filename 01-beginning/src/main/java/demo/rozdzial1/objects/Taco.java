@@ -2,10 +2,15 @@ package demo.rozdzial1.objects;
 
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
 
+import lombok.*;
+
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Data
 public class Taco {
 
@@ -16,7 +21,11 @@ public class Taco {
     @Size(min=5, message="Name must be at least 5 characters long")
     private String name;
 
-    @Size(min=1, message="You must choose at least 1 ingredient")
-    private List<String> ingredients;
+    @NotEmpty(message="Musisz wybrać przynajmniej jeden składnik")
+    @ToString.Exclude
+    private List<Ingredient> ingredients;
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
 }
