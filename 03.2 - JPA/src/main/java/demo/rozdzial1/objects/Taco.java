@@ -20,9 +20,11 @@ import java.util.Objects;
 public class Taco {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
-    private Date createdAt;
+
+    private Date created_at;
 
     @NotNull
     @Size(min=5, message="Name must be at least 5 characters long")
@@ -39,7 +41,7 @@ public class Taco {
 
     @PrePersist
     void createdAt() {
-        this.createdAt = new Date();
+        this.created_at = new Date();
     }
 
     @Override

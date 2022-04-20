@@ -48,7 +48,8 @@ public class DesignTacoController {
     @GetMapping
     public String showDesignForm(Model model) {
         ingredients = new ArrayList<>();
-        ingredientRepo.findAll().forEach(ingredients::add);
+        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
+        log.info("składniki" + ingredients);
 
         types = Ingredient.Type.values();
 

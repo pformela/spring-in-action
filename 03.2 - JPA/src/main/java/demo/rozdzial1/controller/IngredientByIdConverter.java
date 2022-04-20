@@ -1,13 +1,15 @@
-package demo.rozdzial1.data;
+package demo.rozdzial1.controller;
 
+import java.util.Optional;
+
+import demo.rozdzial1.data.IngredientRepository;
 import demo.rozdzial1.objects.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IngredientByIdConverter
-        implements Converter<String, Ingredient> {
+public class IngredientByIdConverter implements Converter<String, Ingredient> {
 
     private IngredientRepository ingredientRepo;
 
@@ -18,6 +20,9 @@ public class IngredientByIdConverter
 
     @Override
     public Ingredient convert(String id) {
-        return ingredientRepo.findById(id);
+        Optional<Ingredient> optionalIngredient = ingredientRepo.findById(id);
+        return optionalIngredient.isPresent() ?
+                optionalIngredient.get() : null;
     }
+
 }
