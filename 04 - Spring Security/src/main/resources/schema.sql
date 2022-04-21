@@ -38,6 +38,19 @@ create table if not exists Taco_Order_Tacos (
     tacos_id bigint not null
 );
 
+-- create table if not exists User
+-- (
+--     id           identity,
+--     username     varchar(40) not null,
+--     password     text        not null,
+--     full_name    varchar(60) not null,
+--     street       varchar(40) not null,
+--     city         varchar(60) not null,
+--     state        varchar(60) not null,
+--     zip          varchar(6) not null,
+--     phone_number varchar(9)  not null
+-- );
+
 alter table Taco_Order_Tacos
     add foreign key (order_id) references Taco_Order(id);
 alter table Taco_Order_Tacos
