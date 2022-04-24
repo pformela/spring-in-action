@@ -1,11 +1,10 @@
 package demo.rozdzial1.controller;
 
 import demo.rozdzial1.data.OrderRepository;
-import demo.rozdzial1.objects.Order;
+import demo.rozdzial1.objects.TacoOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +33,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@Valid Order order, Errors errors,
+    public String processOrder(@Valid TacoOrder order, Errors errors,
                                SessionStatus sessionStatus) {
 
         if(errors.hasErrors())

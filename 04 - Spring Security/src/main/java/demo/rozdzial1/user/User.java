@@ -19,23 +19,22 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED, force = true)
 @RequiredArgsConstructor
-@Table(name="User")
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, unique = true)
     private final String username;
     private final String password;
-    private final String full_name;
+    private final String fullname;
     private final String street;
     private final String city;
     private final String state;
     private final String zip;
-    private final String phone_number;
+    private final String phone;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

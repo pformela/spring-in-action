@@ -10,9 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 public class UserRepositoryUserDetailsService implements UserDetailsService {
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Autowired
     public UserRepositoryUserDetailsService(UserRepository userRepo) {
@@ -28,7 +27,7 @@ public class UserRepositoryUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Użytkownik " + username + " nie został znaleziony.");
         }
 
-        log.info("User: " + user);
+//        log.info("User: " + user);
         return user;
     }
 }

@@ -11,12 +11,11 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-@Entity(name="ingredient")
-@Table(name = "Ingredient")
+@Entity
 public class Ingredient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private final String id;
     private final String name;
     @Enumerated(EnumType.STRING)

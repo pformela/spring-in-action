@@ -1,7 +1,7 @@
 package demo.rozdzial1.data;
 
-import demo.rozdzial1.objects.Order;
+import demo.rozdzial1.objects.TacoOrder;
 import org.springframework.data.repository.CrudRepository;
 
-public interface OrderRepository extends CrudRepository<Order, String> {
+public interface OrderRepository extends CrudRepository<TacoOrder, String> {
 }

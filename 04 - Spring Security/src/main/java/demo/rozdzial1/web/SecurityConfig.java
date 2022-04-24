@@ -2,64 +2,34 @@ package demo.rozdzial1.web;
 
 import demo.rozdzial1.security.UserRepositoryUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserRepositoryUserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder encoder;
-
     @Autowired
-    public SecurityConfig(UserRepositoryUserDetailsService userDetailsService,
-                          BCryptPasswordEncoder encoder) {
-        this.userDetailsService = userDetailsService;
-        this.encoder = encoder;
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(new AuthenticationProvider() {
-            @Override
-            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                String username = authentication.getName();
-                String password = authentication.getCredentials().toString();
-                if (username.equals("sa") && password.equals("sa")) {
-                    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                    return new UsernamePasswordAuthenticationToken(username, password, grantedAuthorities);
-                }
-                throw new AuthenticationServiceException("Invalid credentials.");
-            }
-
-            @Override
-            public boolean supports(Class<?> authentication) {
-                return authentication.equals(UsernamePasswordAuthenticationToken.class);
-            }
-        });
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/h2-console/**");
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
 
     @Override
@@ -70,10 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/design", "/orders")
                 .access("hasRole('ROLE_USER')") // można tutaj dodawać więcej warunków dla uwierzytelnienia użytkownika
                 .antMatchers("/", "/**").permitAll()
-                .anyRequest().authenticated()
             .and()
                 .formLogin()
                 .loginPage("/login")
+            .and()
 //                .failureUrl("/login?error=true") // zdefiniowanie strony logowania
 //                .loginProcessingUrl("/authenticate") // nasłuchiwanie żądań w podanej ścieżce dostępu, aby obsługiwać logowanie
                 // udane logowanie domyślnie przenosi na stronę, na której użytkownik znajdował się przed koniecznością zalogowania się - w przeciwnym wypadku na stronę główną
@@ -81,9 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .defaultSuccessUrl("/design", true) - zmiana domyślnej strony wyświetlanej po zalogowaniu się, nawet w przypadku gdy użytkownik znajdował się na innej stronie przed logowaniem
 //                .usernameParameter("username")
 //                .passwordParameter("password")
-            .and()
                 .logout() // ustalenie strony, na którą użytkownik zostaje przeniesiony po wylogowaniu się
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+            .and()
+                .csrf()
+                .ignoringAntMatchers("/h2-console/**")
+
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+            .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin();
 
     }
 

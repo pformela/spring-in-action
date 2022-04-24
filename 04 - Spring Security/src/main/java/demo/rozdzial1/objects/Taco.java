@@ -16,7 +16,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @ToString
 @Entity
-@Table(name = "Taco")
 public class Taco {
 
     @Id
